@@ -3,6 +3,8 @@ package domain;
 import dao.TowerDao;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map;
 
 /**
  * This class contains most of the logic and keeps everything together.
@@ -85,16 +87,21 @@ public class Game {
      * Creates waves of invaders
      * @return Returns ArrayList with waves
      */
-    private ArrayList<Wave> createWaves() {
+   private ArrayList<Wave> createWaves() {
+    ArrayList<Wave> waves = new ArrayList<>();
+
+    for (int i = 0; i < 1000; i++) {
         ArrayList<Invader> invaders = new ArrayList<>();
-        ArrayList<Wave> waves = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
+
+        for (int j = 0; j <= i; j++) {
             invaders.add(new Invader(100, 30, getPathThroughMap()));
-            waves.add(new Wave(i, invaders, (i + 1) * 10));
         }
-        return waves;
+
+        waves.add(new Wave(i, invaders, (i + 1) * 10));
     }
 
+    return waves;
+}
     /**
      * Moves all invaders
      */
@@ -108,13 +115,18 @@ public class Game {
      * Starts next wave and spawns invaders
      */
     public void nextWave() {
-        if (this.waves.isEmpty()) {
-            //TODO: Victory
-        }
-        for(int i = 0; i <= this.wave; i++){
-            this.invadersAlive.add(this.waves.get(this.wave).spawnInvader());
+    if (this.wave >= this.waves.size()) {
+        return;
+    }
+
+    for (int i = 0; i <= this.wave; i++) {
+        Invader invader = this.waves.get(this.wave).spawnInvader();
+
+        if (invader != null) {
+            this.invadersAlive.add(invader);
         }
     }
+}
 
     /**
      * Attacks with all towers. Removes an invader if it dies.
